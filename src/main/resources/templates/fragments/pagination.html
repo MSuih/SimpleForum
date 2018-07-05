@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Paged page</title>
+    </head>
+    <body>
+        <nav id="pageselect" th:fragment="pagenav(baseid, pages, pagesize)"
+             th:if="${pages.totalPages} gt 1">
+            <a id="arrB" href="#" th:href="@{${baseurl} + ${baseid} + '/page/1'}">&Lt;</a>
+            <span th:class="${pages.number} gt 2 ? '' : 'disabled'">...</span>
+            <a th:class="${pages.number} - 1 gt 0 ? '' : 'disabled'"
+               th:href="@{${baseurl} + ${baseid} + '/page/' + ${pages.number - 1}}"
+               th:text="${pages.number} - 1">A</a>
+            <a th:class="${pages.number} gt 0 ? '' : 'disabled'"
+               th:href="@{${baseurl} + ${baseid} + '/page/' + ${pages.number}}"
+               th:text="${pages.number}">B</a>
+            <a id="current" th:href="@{${baseurl} + ${baseid} + '/page/' + ${pages.number + 1}}"
+               th:text="${pages.number} + 1">C</a>
+            <a th:class="${pages.number} + 1 lt ${pages.totalPages} ? '' : 'disabled'"
+               th:href="@{${baseurl} + ${baseid} + '/page/' + ${pages.number + 2}}"
+               th:text="${pages.number} + 2">D</a>
+            <a th:class="${pages.number} + 2 lt ${pages.totalPages} ? '' : 'disabled'"
+               th:href="@{${baseurl} + ${baseid} + '/page/' + ${pages.number + 3}}"
+               th:text="${pages.number} + 3">E</a>
+            <span th:class="${pages.number} + 3 lt ${pages.totalPages} ? '' : 'disabled'">...</span>
+            <a id="arrF" href="#"
+               th:href="@{${baseurl} + ${baseid} + '/page/' + ${pages.totalPages}}">&Gt;</a>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                "use strict";
+                if (!window.globalVariableHolder)
+                    window.globalVariableHolder = new Object();
+
+                window.globalVariableHolder.baseid = /*[[${baseid}]]*/ -1;
+                window.globalVariableHolder.currentpage = /*[[${pages.number}]]*/ -1;
+                window.globalVariableHolder.totalpages = /*[[${pages.totalPages}]]*/ -1;
+                window.globalVariableHolder.itemsPerPage = /*[[${pagesize}]]*/ -1;
+
+                window.history.replaceState({page: /*[[${pages.number}]]*/ -1, items: /*[[${pages.content}]]*/ []}, "");
+                /*]]>*/
+            </script>
+            <script src="../public/js/pages.js" th:src="@{/js/pages.js}" ></script>
+        </nav>
+    </body>
+</html>

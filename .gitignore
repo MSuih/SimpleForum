@@ -1,0 +1,8 @@
+docs/*
+nbactions.xml
+nb-configuration.xml
+/target/
+.sass-cache/*
+script.bat
+src/main/resources/application.properties
+

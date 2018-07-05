@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="fragments/basiclayout :: metadata (title=#{login.title})">
+            <meta charset="UTF-8" />
+            <title th:text="#{forum.name}">Forum name</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="../public/css/main.css" th:href="@{/css/main.css}" type="text/css" />
+            <script src="../public/javascript/global.js" th:src="@{/javascript/global.js}" defer="defer"></script>
+        </th:block>
+    </head>
+    <body>
+        <header th:replace="fragments/basiclayout :: topbar">
+                ...
+        </header>
+        <h2 th:if="${param.logout}" class="alert alert-error" th:text="#{login.logout-success}">Successful logout</h2>
+        <h2 th:if="${param.error}" class="alert alert-success" th:text="#{login.failed}">Invalid credentials</h2>
+        <h2 th:if="${param.created}" class="alert alert-success" th:text="#{login.signup-success}">Account created</h2>
+        <form id="login" th:action="@{/login}" method="POST">
+            <input type="text" name="username" required="required" th:placeholder="#{login.username-hint}" />
+            <input type="password" name="password" required="required" th:placeholder="#{login.password-hint}" />
+            <input type="checkbox" id="remember" name="remember-me" />
+            <label for="remember" th:text="#{login.remember}">Remember me</label>
+            <input type="submit" th:value="#{login.login-button}" />
+        </form>
+        <footer th:replace="fragments/basiclayout :: footer">
+            ...
+        </footer>
+    </body>
+</html>

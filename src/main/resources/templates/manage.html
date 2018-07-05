@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="fragments/basiclayout :: metadata (title=#{manage.title})">
+            <meta charset="UTF-8" />
+            <title th:text="#{forum.name}">Forum name</title>
+        </th:block>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            window.mangementVariables = {
+                rooturl:/*[[@{__${baseurl}__}]]*/ ""
+            };
+            /*]]>*/
+        </script>
+        <script src="../public/js/manage.js" th:src="@{/js/manage.js}" defer="defer"></script>
+        <meta name="_csrf" content="none" th:content="${_csrf.parameterName}" />
+        <meta name="_csrf_token" content="none" th:content="${_csrf.token}" />
+    </head>
+    <body>
+        <header th:replace="fragments/basiclayout :: topbar">
+                ...
+        </header>
+        <h2 id="userb" th:text="#{manage.user}">Manage users</h2>
+        <div id="userm" class="disabled">
+            <label for="username" th:text="#{manage.user-select}">User:</label>
+            <input type="text" id="username" />
+            <input id="usr-verify" type="button" value="check" th:value="#{manage.user-verify}" />
+            <br />
+            <label for="role" th:text="#{manage.user-role}">role:</label>
+            <select id="role" disabled="disabled">
+                <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.value}">user</option>
+            </select>
+            <input disabled="disabled" type="checkbox" id="usr-disable" />
+            <label for="usr-disable" th:text="#{manage.user-disable}">Disable</label>
+            <button id="usr-update" disabled="disabled" type="button" th:text="#{manage.user-update}">Set role</button>
+        </div>
+        <br />
+        <h2 id="cateb"
+            th:text="#{manage.category}">Manage categories and topics</h2>
+        <div id="catem" class="disabled">
+            <th:block th:each="category : ${categories}">
+                <h3 th:text="${category.name}"></h3>
+                <a href="#" class="delete-category" th:id="'c' + ${category.id}">
+                    <img class="icon" src="../public/img/icon-delete.svg"
+                        th:src="@{/img/icon-delete.svg}" />
+                </a>
+                <a href="#" class="create-topic" th:id="'c' + ${category.id}">
+                    <img class="icon" src="../public/img/icon-create.svg"
+                         th:src="@{/img/icon-create.svg}"/>
+                </a>
+                <form class="disabled" method="POST" th:action="@{/topic}">
+                    <h3 th:text="#{topic.create-title}">Create a new topic:</h3>
+                    <input type="hidden" name="category" th:value="${category.id}"/>
+                    <input type="text" name="name" required="required" minlength="3" th:placeholder="#{topic.name-hint}" />
+                    <input type="text" name="description" th:placeholder="#{topic.description-hint}" />
+                    <input type="submit" th:value="#{topic.create}" />
+                </form>
+                <ul>
+                    <th:block th:each="topic : ${category.topics}">
+                        <li>
+                            <th:block th:text="${topic.name}"></th:block>
+                            <a href="#" class="delete-topic" th:id="'t' + ${topic.id}">
+                                <img class="icon" src="../public/img/icon-delete.svg"
+                                    th:src="@{/img/icon-delete.svg}" />
+                            </a>
+                        </li>
+                    </th:block>
+                </ul>
+            </th:block>
+            <form method="POST" th:action="@{/category}">
+                <h3 th:text="#{category.create-title}">Create title</h3>
+                <input type="text" name="name" required="required" minlength="3" th:placeholder="#{category.name-hint}"/>
+                <input type="text" name="description" th:placeholder="#{category.description-hint}"/>
+                <input type="submit" th:value="#{category.create}" />
+            </form>
+        </div>
+        <footer th:replace="fragments/basiclayout :: footer">
+            ...
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="fragments/basiclayout :: metadata (title='Error')">
+            <meta charset="UTF-8" />
+            <title th:text="#{forum.name}">Forum name</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="../public/css/main.css" th:href="@{/css/main.css}" type="text/css" />
+            <script src="../public/javascript/global.js" th:src="@{/javascript/global.js}" defer="defer"></script>
+        </th:block>
+    </head>
+    <body>
+        <header th:replace="fragments/basiclayout :: topbar">
+                ...
+        </header>
+        <section>
+            <h2 th:text="${status} + ' ' + ${error}">Title</h2>
+            <th:block th:switch="${status}">
+                <p th:case="404" th:text="#{error.notfound}">This wasn't found</p>
+                <p th:case="403" th:text="#{error.accessviol}">Not allowed of blocked by default</p>
+                <p th:case="*" th:text="#{error.generic}">An error has occured</p>
+            </th:block>
+            <span th:text="'Message: ' + ${message}">Message: Some text</span>
+            <span th:text="'Time: ' + ${timestamp}">Timestamp: 5555</span>
+        </section>
+        <footer th:replace="fragments/basiclayout :: footer">
+            ...
+        </footer>
+    </body>
+</html>

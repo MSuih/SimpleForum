@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.springframework.org/security/tags">
+    <head>
+        <th:block th:fragment="metadata">
+            <meta charset="UTF-8" />
+            <title th:text="${title} ? ${title} + ' - ' + #{forum.name}: #{forum.name}">Forum name</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="../public/css/main.css" th:href="@{/css/main.css}" type="text/css" />
+            <script src="../public/js/global.js" th:src="@{/js/global.js}" defer="defer"></script>
+        </th:block>
+    </head>
+    <body>
+        <header th:fragment="topbar">
+            <a href="#" th:href="@{/}"><h1 th:text="#{forum.name}">Otsikko</h1></a>
+            <span th:text="#{forum.description}">Kuvausteksti</span> <br />
+            <a href="#" th:href="@{/}" th:text="#{forum.tofront}">front</a>
+            <th:block sec:authorize="isAnonymous()">
+                | <a href="#" th:href="@{/login}" th:text="#{forum.tologin}">login</a>
+                | <a href="#" th:href="@{/signup}" th:text="#{forum.tosignup}">Sign Up</a>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                | <a href="#" th:href="@{/logout}" th:text="#{forum.logout}">logout</a>
+            </th:block>
+            <th:block sec:authorize="hasAuthority('SUPERMOD')">
+                | <a href="#" th:href="@{/manage}" th:text="#{forum.manage}">manage</a>
+            </th:block>
+            <hr />
+        </header>
+        <footer th:fragment="footer">
+            <hr />
+            SimpleForum
+        </footer>
+    </body>
+</html>

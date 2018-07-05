@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <head th:replace="fragments/basiclayout :: metadata (title=${topic.name})">
+        <meta charset="UTF-8" />
+        <title th:text="#{forum.name}">Forum name</title>
+    </head>
+    <body>
+        <header th:replace="fragments/basiclayout :: topbar">
+                ...
+        </header>
+        <section>
+            <h2 th:utext="${topic.name}">Collection of threads</h2>
+            <span th:utext="${topic.description}">Description</span>
+            <br />
+            <p th:if="${threads.totalElements == 0}" th:text="#{topic.nothreads}">This is empty</p>
+            <div th:each="thread : ${threads}">
+                <a href="#" th:href="@{/thread/__${thread.id}__}">
+                    <img class="icon" src="../public/img/icon-sticky.svg" th:src="@{/img/icon-sticky.svg}"
+                         alt="Stickied" th:alt="#{thread.stickied}" th:if="${thread.stickied}" />
+                    <span th:utext="${thread.title}" th:id="'thr' + ${thread.id}">Thread of insignificant messages</span>
+                </a>
+                <span class="note">Last message:
+                    <span class="timeunit" th:text="${thread.lastUpdate}">2018-01-10 15:11:10.3</span>
+                </span>
+            </div>
+        </section>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            "use strict";
+            if (!window.globalVariableHolder)
+                window.globalVariableHolder = new Object();
+
+            window.globalVariableHolder.baseurl = "/topic/";
+            window.globalVariableHolder.redirecturl = /*[[@{/thread/}]]*/ "";
+            /*]]>*/
+        </script>
+        <nav id="pageselect" th:if="${threads.totalPages} gt 1"
+             th:replace="fragments/pagination :: pagenav(${topic.id}, ${threads},
+                ${threadsPerPage})">
+            ....
+        </nav>
+        <form th:action="@{/thread}" method="POST" sec:authorize="hasAuthority('USER')">
+            <h3 th:text="#{thread.create-title}">Create a new thread:</h3>
+            <input type="hidden" name="topicId" th:value="${topic.id}" />
+            <input type="text" name="title" required="required" minlength="3" th:placeholder="#{thread.hint}" />
+            <textarea name="content" required="required" minlength="3" th:placeholder="#{message.hint}"></textarea>
+            <input type="submit" th:value="#{thread.create-button}" />
+        </form>
+        <footer th:replace="fragments/basiclayout :: footer">
+            ...
+        </footer>
+    </body>
+</html>

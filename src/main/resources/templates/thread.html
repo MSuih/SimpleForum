@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="fragments/basiclayout :: metadata (title=${thread.title})">
+            <meta charset="UTF-8" />
+            <title>Forum name</title>
+        </th:block>
+        <meta name="_csrf" content="none" th:content="${_csrf.parameterName}" />
+        <meta name="_csrf_token" content="none" th:content="${_csrf.token}" />
+    </head>
+    <body>
+        <header th:replace="fragments/basiclayout :: topbar">
+                ...
+        </header>
+        <section th:id="'thr' + ${thread.id}">
+            <div class="iconcontainer">
+                <a href="#">
+                    <img class="icon" id="btn-delete-thread" src="../public/img/icon-delete.svg" th:src="@{/img/icon-delete.svg}" alt="Delete" />
+                </a>
+                <a href="#">
+                    <img class="icon" id="btn-edit-thread" src="../public/img/icon-edit.svg" th:src="@{/img/icon-edit.svg}" alt="Edit" />
+                </a>
+            </div>
+            <h2 th:utext="${thread.title}">Title of this thread</h2>
+            <div th:each="message : ${messages}" th:id="'msg' + ${message.id}">
+                <div class="iconcontainer hidebydefault">
+                    <a href="#" class="btn-quote">
+                        <img class="icon" alt="Quote" src="../public/img/icon-quote.svg" th:src="@{/img/icon-quote.svg}" />
+                    </a>
+                    <a href="#" class="btn-delete">
+                        <img class="icon" alt="Delete" src="../public/img/icon-delete.svg" th:src="@{/img/icon-delete.svg}" />
+                    </a>
+                </div>
+                <a href="#" th:href="@{/redirect/__${message.id}__}"
+                   th:text="${message.timePosted.toInstant()}" class="timeunit">57 minutes ago</a>
+                <p th:utext="${message.content}">Contents of this message</p>
+            </div>
+        </section>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            "use strict";
+            if (!window.globalVariableHolder)
+                window.globalVariableHolder = new Object();
+
+            window.globalVariableHolder.baseurl = "thread/";
+            window.globalVariableHolder.redirecturl = /*[[@{/redirect/}]]*/ "";
+            /*]]>*/
+        </script>
+        <nav id="pageselect" th:if="${messages.totalPages} gt 1"
+             th:replace="fragments/pagination :: pagenav(${thread.id}, ${messages},
+                ${messagesPerPage})">
+            ....
+        </nav>
+        <form th:action="@{/message}" method="POST">
+            <h3 th:text="#{message.create-title}">Create a reply</h3>
+            <input type="hidden" name="threadId" th:value="${thread.id}" />
+            <textarea id="msgbox" name="content" required="required" minlength="3" th:placeholder="#{message.hint}"></textarea>
+            <input type="submit" th:value="#{message.create-button}" />
+        </form>
+        <footer th:replace="fragments/basiclayout :: footer">
+            ...
+        </footer>
+    </body>
+</html>

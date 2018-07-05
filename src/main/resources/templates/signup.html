@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.springframework.org/security/tags">
+    <head>
+        <th:block th:replace="fragments/basiclayout :: metadata (title=#{login.signup.title})">
+            <meta charset="UTF-8" />
+            <title th:text="#{forum.name}">Forum name</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="../public/css/main.css" th:href="@{/css/main.css}" type="text/css" />
+            <script src="../public/javascript/global.js" th:src="@{/javascript/global.js}" defer="defer"></script>
+        </th:block>
+        <script th:src="@{/js/signup.js}" src="../public/js/signup.js" defer="defer"></script>
+    </head>
+    <body>
+        <header th:replace="fragments/basiclayout :: topbar">
+                ...
+        </header>
+        <h2 th:if="${param.logout}" class="alert-error" th:text="#{login.signup.success}">Successful logout</h2>
+        <h2 th:if="${param.error}" class="alert-success" th:text="#{login.signup.failed}">Invalid credentials</h2>
+        <form id="login" th:action="@{/signup}" method="POST">
+            <input type="text" id="username" name="username" required="required" minlength="3" maxlength="25" th:placeholder="#{login.signup.username}" />
+            <input type="password" id="pass1" name="password" required="required" minlength="5" th:placeholder="#{login.signup.password}" />
+            <input type="password" id="pass2" required="required" th:placeholder="#{login.signup.password-again}" />
+            <input type="submit" th:value="#{login.signup.button}" />
+        </form>
+        <script th:src="@{/js/login.js}"></script>
+        <footer th:replace="fragments/basiclayout :: footer">
+            ...
+        </footer>
+    </body>
+</html>

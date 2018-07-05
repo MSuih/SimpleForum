@@ -1,0 +1,13 @@
+server.port=80
+
+# Database
+spring.jpa.hibernate.ddl-auto=validate
+spring.datasource.url=jdbc:mariadb://address:port/database
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.username=username
+spring.datasource.password=password
+
+# Settings
+simplforum.baseURL=http://address:port/
+simplforum.messages-per-thread=15
+simplforum.threads-per-topic=20
